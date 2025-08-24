@@ -9,6 +9,7 @@ import {
   Sparkles,
   Paperclip,
   X,
+  Camera,
 } from 'lucide-react';
 import {respondInsightfullyWithReasoning} from '@/ai/flows/respond-insightfully-with-reasoning';
 import {Button} from '@/components/ui/button';
@@ -19,6 +20,14 @@ import {Avatar} from '@/components/ui/avatar';
 import {Alert, AlertDescription, AlertTitle} from '@/components/ui/alert';
 import {cn} from '@/lib/utils';
 import {useToast} from '@/hooks/use-toast';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import {CameraCapture} from '@/components/camera-capture';
 
 interface Message {
   role: 'user' | 'bot';
@@ -53,6 +62,7 @@ export function ChatbotTab() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -92,6 +102,11 @@ export function ChatbotTab() {
         });
       }
     }
+  };
+
+  const handlePhotoTaken = (dataUri: string) => {
+    setUploadedImage(dataUri);
+    setIsCameraOpen(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -242,6 +257,25 @@ export function ChatbotTab() {
               <Paperclip className="h-5 w-5" />
               <span className="sr-only">Attach file</span>
             </Button>
+            <Dialog open={isCameraOpen} onOpenChange={setIsCameraOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  disabled={isLoading}
+                >
+                  <Camera className="h-5 w-5" />
+                  <span className="sr-only">Use camera</span>
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Take a Photo</DialogTitle>
+                </DialogHeader>
+                <CameraCapture onCapture={handlePhotoTaken} />
+              </DialogContent>
+            </Dialog>
             <Input
               type="text"
               placeholder="Ask a question..."
