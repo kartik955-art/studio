@@ -48,7 +48,7 @@ function BotMessage({content}: {content: string}) {
       } else {
         clearInterval(intervalId);
       }
-    }, 20); // Adjust speed of typing animation here
+    }, 10); // Adjust speed of typing animation here
 
     return () => clearInterval(intervalId);
   }, [content]);
