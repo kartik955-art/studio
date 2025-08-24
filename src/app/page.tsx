@@ -8,7 +8,8 @@ import {
 } from '@/components/ui/tabs';
 import {ReasoningTab} from '@/components/reasoning-tab';
 import {ImageGenTab} from '@/components/image-gen-tab';
-import {Sparkles, Image as ImageIcon} from 'lucide-react';
+import {ChatbotTab} from '@/components/chatbot-tab';
+import {Sparkles, Image as ImageIcon, Bot} from 'lucide-react';
 import {Footer} from '@/components/layout/footer';
 
 export default function Home() {
@@ -21,15 +22,19 @@ export default function Home() {
             Welcome to Nexora
           </h1>
           <p className="text-muted-foreground">
-            Your intelligent AI assistant for reasoning and image generation.
+            Your intelligent AI assistant for CHATBOT reasoning and image generation.
           </p>
         </div>
         <div className="mx-auto w-full max-w-4xl">
           <Tabs defaultValue="reasoning">
-            <TabsList className="grid w-full grid-cols-2 bg-card/50 backdrop-blur-sm border-white/20">
+            <TabsList className="grid w-full grid-cols-3 bg-card/50 backdrop-blur-sm border-white/20">
               <TabsTrigger value="reasoning">
                 <Sparkles className="mr-2 h-4 w-4" />
                 Reasoning
+              </TabsTrigger>
+              <TabsTrigger value="chatbot">
+                <Bot className="mr-2 h-4 w-4" />
+                Chatbot
               </TabsTrigger>
               <TabsTrigger value="image-generation">
                 <ImageIcon className="mr-2 h-4 w-4" />
@@ -38,6 +43,9 @@ export default function Home() {
             </TabsList>
             <TabsContent value="reasoning" className="mt-6">
               <ReasoningTab />
+            </TabsContent>
+            <TabsContent value="chatbot" className="mt-6">
+              <ChatbotTab />
             </TabsContent>
             <TabsContent value="image-generation" className="mt-6">
               <ImageGenTab />
