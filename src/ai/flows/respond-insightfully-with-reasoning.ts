@@ -12,15 +12,29 @@ import {z} from 'genkit';
 
 const RespondInsightfullyWithReasoningInputSchema = z.object({
   question: z.string().describe('The question to be answered.'),
+  imageDataUri: z
+    .string()
+    .optional()
+    .describe(
+      "An image, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
+    ),
 });
-export type RespondInsightfullyWithReasoningInput = z.infer<typeof RespondInsightfullyWithReasoningInputSchema>;
+export type RespondInsightfullyWithReasoningInput = z.infer<
+  typeof RespondInsightfullyWithReasoningInputSchema
+>;
 
 const RespondInsightfullyWithReasoningOutputSchema = z.object({
-  answer: z.string().describe('The insightful and reasoned answer to the question.'),
+  answer: z
+    .string()
+    .describe('The insightful and reasoned answer to the question.'),
 });
-export type RespondInsightfullyWithReasoningOutput = z.infer<typeof RespondInsightfullyWithReasoningOutputSchema>;
+export type RespondInsightfullyWithReasoningOutput = z.infer<
+  typeof RespondInsightfullyWithReasoningOutputSchema
+>;
 
-export async function respondInsightfullyWithReasoning(input: RespondInsightfullyWithReasoningInput): Promise<RespondInsightfullyWithReasoningOutput> {
+export async function respondInsightfullyWithReasoning(
+  input: RespondInsightfullyWithReasoningInput
+): Promise<RespondInsightfullyWithReasoningOutput> {
   return respondInsightfullyWithReasoningFlow(input);
 }
 
@@ -31,6 +45,11 @@ const respondInsightfullyWithReasoningPrompt = ai.definePrompt({
   prompt: `You are an AI assistant that provides insightful and reasoned answers to questions.
 
   Answer the following question to the best of your ability, using external tools when necessary to gather information.
+
+  {{#if imageDataUri}}
+  Refer to the following image when answering the question.
+  Image: {{media url=imageDataUri}}
+  {{/if}}
 
   Question: {{{question}}}`,
 });

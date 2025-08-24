@@ -1,19 +1,29 @@
 'use client';
 
 import {useState, useRef, useEffect} from 'react';
-import {Send, Bot, User, Sparkles} from 'lucide-react';
+import Image from 'next/image';
+import {
+  Send,
+  Bot,
+  User,
+  Sparkles,
+  Paperclip,
+  X,
+} from 'lucide-react';
 import {respondInsightfullyWithReasoning} from '@/ai/flows/respond-insightfully-with-reasoning';
 import {Button} from '@/components/ui/button';
 import {Card, CardContent} from '@/components/ui/card';
 import {Input} from '@/components/ui/input';
 import {ScrollArea} from '@/components/ui/scroll-area';
-import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
+import {Avatar} from '@/components/ui/avatar';
 import {Alert, AlertDescription, AlertTitle} from '@/components/ui/alert';
 import {cn} from '@/lib/utils';
+import {useToast} from '@/hooks/use-toast';
 
 interface Message {
   role: 'user' | 'bot';
   content: string;
+  image?: string;
 }
 
 export function ChatbotTab() {
@@ -21,8 +31,11 @@ export function ChatbotTab() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const {toast} = useToast();
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -33,18 +46,53 @@ export function ChatbotTab() {
     }
   }, [messages]);
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.size > 4 * 1024 * 1024) {
+        toast({
+          title: 'File too large',
+          description: 'Please upload an image smaller than 4MB.',
+          variant: 'destructive',
+        });
+        return;
+      }
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          setUploadedImage(e.target?.result as string);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        toast({
+          title: 'Unsupported file type',
+          description: 'Please upload an image file.',
+          variant: 'destructive',
+        });
+      }
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || isLoading) return;
+    if ((!input.trim() && !uploadedImage) || isLoading) return;
 
-    const userMessage: Message = {role: 'user', content: input};
+    const userMessage: Message = {
+      role: 'user',
+      content: input,
+      image: uploadedImage ?? undefined,
+    };
     setMessages(prev => [...prev, userMessage]);
     setInput('');
+    setUploadedImage(null);
     setIsLoading(true);
     setError(null);
 
     try {
-      const result = await respondInsightfullyWithReasoning({question: input});
+      const result = await respondInsightfullyWithReasoning({
+        question: input,
+        imageDataUri: uploadedImage ?? undefined,
+      });
       const botMessage: Message = {role: 'bot', content: result.answer};
       setMessages(prev => [...prev, botMessage]);
     } catch (err) {
@@ -57,7 +105,7 @@ export function ChatbotTab() {
   };
 
   return (
-    <Card className="flex h-[600px] flex-col">
+    <Card className="flex h-[700px] flex-col">
       <CardContent className="flex flex-1 flex-col p-6">
         <ScrollArea className="flex-1 pr-4" ref={scrollAreaRef}>
           <div className="space-y-6">
@@ -78,10 +126,8 @@ export function ChatbotTab() {
                 )}
               >
                 {message.role === 'bot' && (
-                  <Avatar className="h-8 w-8">
-                    <AvatarFallback>
-                      <Bot className="h-5 w-5" />
-                    </AvatarFallback>
+                  <Avatar className="h-8 w-8 bg-muted flex items-center justify-center">
+                    <Bot className="h-5 w-5" />
                   </Avatar>
                 )}
                 <div
@@ -92,23 +138,28 @@ export function ChatbotTab() {
                       : 'bg-muted'
                   )}
                 >
+                  {message.image && (
+                    <Image
+                      src={message.image}
+                      alt="Uploaded content"
+                      width={300}
+                      height={200}
+                      className="rounded-md mb-2"
+                    />
+                  )}
                   <p className="whitespace-pre-wrap">{message.content}</p>
                 </div>
                 {message.role === 'user' && (
-                  <Avatar className="h-8 w-8">
-                    <AvatarFallback>
-                      <User className="h-5 w-5" />
-                    </AvatarFallback>
+                  <Avatar className="h-8 w-8 bg-muted flex items-center justify-center">
+                    <User className="h-5 w-5" />
                   </Avatar>
                 )}
               </div>
             ))}
             {isLoading && (
               <div className="flex items-start gap-4">
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback>
-                    <Bot className="h-5 w-5" />
-                  </AvatarFallback>
+                <Avatar className="h-8 w-8 bg-muted flex items-center justify-center">
+                  <Bot className="h-5 w-5" />
                 </Avatar>
                 <div className="rounded-lg bg-muted p-3">
                   <div className="flex items-center gap-2">
@@ -128,27 +179,62 @@ export function ChatbotTab() {
             </Alert>
           </div>
         )}
-        <form
-          onSubmit={handleSubmit}
-          className="mt-4 flex items-center gap-2 border-t pt-4"
-        >
-          <Input
-            type="text"
-            placeholder="Ask a question..."
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            className="h-12 text-base"
-            disabled={isLoading}
-          />
-          <Button
-            type="submit"
-            disabled={isLoading || !input.trim()}
-            size="lg"
-          >
-            <Send className="h-5 w-5" />
-            <span className="sr-only">Send</span>
-          </Button>
-        </form>
+        <div className="mt-4 border-t pt-4">
+          {uploadedImage && (
+            <div className="relative mb-2 w-fit">
+              <Image
+                src={uploadedImage}
+                alt="preview"
+                width={80}
+                height={80}
+                className="rounded-md object-cover"
+              />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="absolute -right-2 -top-2 h-6 w-6 rounded-full bg-muted-foreground/50 text-white hover:bg-muted-foreground"
+                onClick={() => setUploadedImage(null)}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
+          <form onSubmit={handleSubmit} className="flex items-center gap-2">
+            <Input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              className="hidden"
+              accept="image/*"
+            />
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isLoading}
+            >
+              <Paperclip className="h-5 w-5" />
+              <span className="sr-only">Attach file</span>
+            </Button>
+            <Input
+              type="text"
+              placeholder="Ask a question..."
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              className="h-12 text-base"
+              disabled={isLoading}
+            />
+            <Button
+              type="submit"
+              disabled={isLoading || (!input.trim() && !uploadedImage)}
+              size="lg"
+            >
+              <Send className="h-5 w-5" />
+              <span className="sr-only">Send</span>
+            </Button>
+          </form>
+        </div>
       </CardContent>
     </Card>
   );
