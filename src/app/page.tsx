@@ -14,6 +14,7 @@ import {
   Image as ImageIcon,
   MessageCircle,
 } from 'lucide-react';
+import {Footer} from '@/components/layout/footer';
 
 export default function Home() {
   return (
@@ -56,6 +57,7 @@ export default function Home() {
           </Tabs>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }
