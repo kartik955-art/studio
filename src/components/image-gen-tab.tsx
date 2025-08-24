@@ -51,7 +51,7 @@ export function ImageGenTab() {
             placeholder="Describe the image you want to create..."
             value={prompt}
             onChange={e => setPrompt(e.target.value)}
-            className="h-12 text-base"
+            className="h-12 text-base bg-transparent"
             disabled={isLoading || isListening}
           />
           <VoiceInputButton
@@ -70,7 +70,7 @@ export function ImageGenTab() {
         </div>
       </form>
 
-      <Card className="w-full aspect-video flex items-center justify-center bg-muted/50 overflow-hidden shadow-lg">
+      <Card className="w-full aspect-video flex items-center justify-center bg-card/50 backdrop-blur-sm border-white/20 overflow-hidden shadow-lg">
         <CardContent className="p-0 w-full h-full flex items-center justify-center">
           {isLoading ? (
             <Skeleton className="w-full h-full" />
