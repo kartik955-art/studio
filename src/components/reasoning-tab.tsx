@@ -94,92 +94,96 @@ export function ReasoningTab() {
 
   return (
     <div className="space-y-6">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {uploadedImage && (
-          <div className="relative mb-2 w-fit">
-            <Image
-              src={uploadedImage}
-              alt="preview"
-              width={120}
-              height={120}
-              className="rounded-md object-cover"
-            />
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute -right-2 -top-2 h-6 w-6 rounded-full bg-muted-foreground/50 text-white hover:bg-muted-foreground"
-              onClick={() => setUploadedImage(null)}
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
-        )}
-        <div className="relative">
-          <Textarea
-            placeholder="Ask Nexora a question..."
-            value={question}
-            onChange={e => setQuestion(e.target.value)}
-            className="pr-40 min-h-[100px] text-base"
-            disabled={isLoading || isListening}
-          />
-          <div className="absolute top-3 right-3 flex items-center gap-2">
-            <Input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileChange}
-              className="hidden"
-              accept="image/*"
-            />
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              className="h-10 w-10"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isLoading}
-            >
-              <Paperclip className="h-5 w-5" />
-              <span className="sr-only">Attach file</span>
-            </Button>
-            <Dialog open={isCameraOpen} onOpenChange={setIsCameraOpen}>
-              <DialogTrigger asChild>
+      <Card className="bg-card/50 backdrop-blur-sm border-white/20">
+        <CardContent className="p-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {uploadedImage && (
+              <div className="relative mb-2 w-fit">
+                <Image
+                  src={uploadedImage}
+                  alt="preview"
+                  width={120}
+                  height={120}
+                  className="rounded-md object-cover"
+                />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute -right-2 -top-2 h-6 w-6 rounded-full bg-muted-foreground/50 text-white hover:bg-muted-foreground"
+                  onClick={() => setUploadedImage(null)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
+            <div className="relative">
+              <Textarea
+                placeholder="Ask Nexora a question..."
+                value={question}
+                onChange={e => setQuestion(e.target.value)}
+                className="pr-40 min-h-[100px] text-base bg-transparent"
+                disabled={isLoading || isListening}
+              />
+              <div className="absolute top-3 right-3 flex items-center gap-2">
+                <Input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  className="hidden"
+                  accept="image/*"
+                />
                 <Button
                   type="button"
                   variant="outline"
                   size="icon"
                   className="h-10 w-10"
+                  onClick={() => fileInputRef.current?.click()}
                   disabled={isLoading}
                 >
-                  <Camera className="h-5 w-5" />
-                  <span className="sr-only">Use camera</span>
+                  <Paperclip className="h-5 w-5" />
+                  <span className="sr-only">Attach file</span>
                 </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Take a Photo</DialogTitle>
-                </DialogHeader>
-                <CameraCapture onCapture={handlePhotoTaken} />
-              </DialogContent>
-            </Dialog>
-            <VoiceInputButton
-              onTranscript={handleVoiceTranscript}
-              isListening={isListening}
-              setIsListening={setIsListening}
-            />
-            <Button
-              type="submit"
-              disabled={isLoading || (!question.trim() && !uploadedImage)}
-              className="h-10"
-            >
-              <Sparkles className="mr-2 h-4 w-4" />
-              Ask
-            </Button>
-          </div>
-        </div>
-      </form>
+                <Dialog open={isCameraOpen} onOpenChange={setIsCameraOpen}>
+                  <DialogTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      className="h-10 w-10"
+                      disabled={isLoading}
+                    >
+                      <Camera className="h-5 w-5" />
+                      <span className="sr-only">Use camera</span>
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Take a Photo</DialogTitle>
+                    </DialogHeader>
+                    <CameraCapture onCapture={handlePhotoTaken} />
+                  </DialogContent>
+                </Dialog>
+                <VoiceInputButton
+                  onTranscript={handleVoiceTranscript}
+                  isListening={isListening}
+                  setIsListening={setIsListening}
+                />
+                <Button
+                  type="submit"
+                  disabled={isLoading || (!question.trim() && !uploadedImage)}
+                  className="h-10"
+                >
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  Ask
+                </Button>
+              </div>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
 
       {isLoading && (
-        <Card>
+        <Card className="bg-card/50 backdrop-blur-sm border-white/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <BrainCircuit className="h-6 w-6" />
@@ -187,9 +191,9 @@ export function ReasoningTab() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-3/4" />
+            <Skeleton className="h-4 w-full bg-muted/50" />
+            <Skeleton className="h-4 w-full bg-muted/50" />
+            <Skeleton className="h-4 w-3/4 bg-muted/50" />
           </CardContent>
         </Card>
       )}
@@ -202,7 +206,7 @@ export function ReasoningTab() {
       )}
 
       {answer && !isLoading && (
-        <Card className="shadow-lg">
+        <Card className="shadow-lg bg-card/50 backdrop-blur-sm border-white/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <BrainCircuit className="h-6 w-6 text-primary" />
