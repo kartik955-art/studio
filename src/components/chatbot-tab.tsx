@@ -4,7 +4,7 @@ import {useState, useRef, useEffect} from 'react';
 import Image from 'next/image';
 import {
   Send,
-  Bot,
+  BrainCircuit,
   User,
   Sparkles,
   Paperclip,
@@ -132,7 +132,7 @@ export function ChatbotTab() {
           <div className="space-y-6">
             {messages.length === 0 && (
               <div className="text-center text-muted-foreground">
-                <Bot className="mx-auto h-12 w-12" />
+                <BrainCircuit className="mx-auto h-12 w-12" />
                 <p className="mt-4">
                   Start a conversation by asking a question.
                 </p>
@@ -148,7 +148,7 @@ export function ChatbotTab() {
               >
                 {message.role === 'bot' && (
                   <Avatar className="h-8 w-8 bg-muted flex items-center justify-center">
-                    <Bot className="h-5 w-5" />
+                    <BrainCircuit className="h-5 w-5" />
                   </Avatar>
                 )}
                 <div
@@ -184,7 +184,7 @@ export function ChatbotTab() {
             {isLoading && (
               <div className="flex items-start gap-4">
                 <Avatar className="h-8 w-8 bg-muted flex items-center justify-center">
-                  <Bot className="h-5 w-5" />
+                  <BrainCircuit className="h-5 w-5" />
                 </Avatar>
                 <div className="rounded-lg bg-muted p-3">
                   <div className="flex items-center gap-2">

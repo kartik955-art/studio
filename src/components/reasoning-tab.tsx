@@ -2,7 +2,7 @@
 
 import {useState, useRef} from 'react';
 import Image from 'next/image';
-import {Sparkles, Bot, Paperclip, X} from 'lucide-react';
+import {Sparkles, BrainCircuit, Paperclip, X} from 'lucide-react';
 import {respondInsightfullyWithReasoning} from '@/ai/flows/respond-insightfully-with-reasoning';
 import {Button} from '@/components/ui/button';
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
@@ -148,7 +148,7 @@ export function ReasoningTab() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Bot className="h-6 w-6" />
+              <BrainCircuit className="h-6 w-6" />
               Nexora is thinking...
             </CardTitle>
           </CardHeader>
@@ -171,7 +171,7 @@ export function ReasoningTab() {
         <Card className="shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Bot className="h-6 w-6 text-primary" />
+              <BrainCircuit className="h-6 w-6 text-primary" />
               Nexora's Answer
             </CardTitle>
           </CardHeader>
