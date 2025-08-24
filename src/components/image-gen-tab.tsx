@@ -2,7 +2,7 @@
 
 import {useState} from 'react';
 import Image from 'next/image';
-import {ImageIcon, Wand2} from 'lucide-react';
+import {ImageIcon, Wand2, Download} from 'lucide-react';
 import {generateImage} from '@/ai/flows/generate-image-from-prompt';
 import {Button} from '@/components/ui/button';
 import {Card, CardContent} from '@/components/ui/card';
@@ -38,6 +38,18 @@ export function ImageGenTab() {
     }
   };
 
+  const handleDownload = () => {
+    if (!imageUrl) return;
+    const link = document.createElement('a');
+    link.href = imageUrl;
+    // a fun filename could include part of the prompt
+    const filename = `${prompt.slice(0, 20).replace(/\s/g, '_') || 'generated'}.png`;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const handleVoiceTranscript = (transcript: string) => {
     setPrompt(transcript);
   };
@@ -71,17 +83,30 @@ export function ImageGenTab() {
       </form>
 
       <Card className="w-full aspect-video flex items-center justify-center bg-card/50 backdrop-blur-sm border-white/20 overflow-hidden shadow-lg">
-        <CardContent className="p-0 w-full h-full flex items-center justify-center">
+        <CardContent className="p-0 w-full h-full flex items-center justify-center relative group">
           {isLoading ? (
             <Skeleton className="w-full h-full" />
           ) : imageUrl ? (
-            <Image
-              src={imageUrl}
-              alt={prompt}
-              width={1024}
-              height={576}
-              className="object-contain w-full h-full"
-            />
+            <>
+              <Image
+                src={imageUrl}
+                alt={prompt}
+                width={1024}
+                height={576}
+                className="object-contain w-full h-full"
+              />
+              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={handleDownload}
+                  className="bg-background/50 backdrop-blur-sm"
+                >
+                  <Download className="mr-2 h-5 w-5" />
+                  Download
+                </Button>
+              </div>
+            </>
           ) : (
             <div className="text-center text-muted-foreground p-8">
               <ImageIcon className="mx-auto h-12 w-12" />
