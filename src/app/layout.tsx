@@ -3,7 +3,7 @@ import './globals.css';
 import {Toaster} from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'NEX',
+  title: 'Nexora',
   description:
     'Your intelligent AI assistant for reasoning and image generation.',
 };

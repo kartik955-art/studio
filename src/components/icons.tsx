@@ -1,4 +1,4 @@
-export function NexLogo({className}: {className?: string}) {
+export function NexoraLogo({className}: {className?: string}) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

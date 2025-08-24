@@ -102,7 +102,7 @@ export function ReasoningTab() {
         )}
         <div className="relative">
           <Textarea
-            placeholder="Ask NEX a question..."
+            placeholder="Ask Nexora a question..."
             value={question}
             onChange={e => setQuestion(e.target.value)}
             className="pr-40 min-h-[100px] text-base"
@@ -149,7 +149,7 @@ export function ReasoningTab() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Bot className="h-6 w-6" />
-              NEX is thinking...
+              Nexora is thinking...
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -172,7 +172,7 @@ export function ReasoningTab() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Bot className="h-6 w-6 text-primary" />
-              NEX's Answer
+              Nexora's Answer
             </CardTitle>
           </CardHeader>
           <CardContent>
