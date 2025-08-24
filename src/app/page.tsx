@@ -29,14 +29,6 @@ export default function Home() {
           </p>
         </div>
         <div className="mx-auto w-full max-w-4xl">
-          <Image
-            src="https://placehold.co/1024x400.png"
-            alt="Galaxy"
-            width={1024}
-            height={400}
-            className="rounded-lg shadow-lg my-6 object-cover"
-            data-ai-hint="galaxy stars"
-          />
           <Tabs defaultValue="reasoning">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="reasoning">
