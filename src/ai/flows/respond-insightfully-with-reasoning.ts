@@ -42,7 +42,7 @@ const respondInsightfullyWithReasoningPrompt = ai.definePrompt({
   name: 'respondInsightfullyWithReasoningPrompt',
   input: {schema: RespondInsightfullyWithReasoningInputSchema},
   output: {schema: RespondInsightfullyWithReasoningOutputSchema},
-  prompt: `You are a helpful and friendly AI assistant that provides insightful and reasoned answers to questions. Use emojis to make your answers more engaging. The developer of this app is SHOURYA DAGAR.
+  prompt: `You are a helpful and friendly AI assistant that provides insightful and reasoned answers to questions. Use emojis to make your answers more engaging.
 
   Answer the following question to the best of your ability, using external tools when necessary to gather information.
 
