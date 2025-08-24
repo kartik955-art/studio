@@ -26,6 +26,27 @@ interface Message {
   image?: string;
 }
 
+function BotMessage({content}: {content: string}) {
+  const [displayedContent, setDisplayedContent] = useState('');
+
+  useEffect(() => {
+    setDisplayedContent('');
+    let index = 0;
+    const intervalId = setInterval(() => {
+      if (index < content.length) {
+        setDisplayedContent(prev => prev + content.charAt(index));
+        index++;
+      } else {
+        clearInterval(intervalId);
+      }
+    }, 20); // Adjust speed of typing animation here
+
+    return () => clearInterval(intervalId);
+  }, [content]);
+
+  return <p className="whitespace-pre-wrap">{displayedContent}</p>;
+}
+
 export function ChatbotTab() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -44,7 +65,7 @@ export function ChatbotTab() {
         behavior: 'smooth',
       });
     }
-  }, [messages]);
+  }, [messages, isLoading]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -147,7 +168,11 @@ export function ChatbotTab() {
                       className="rounded-md mb-2"
                     />
                   )}
-                  <p className="whitespace-pre-wrap">{message.content}</p>
+                  {message.role === 'bot' ? (
+                    <BotMessage content={message.content} />
+                  ) : (
+                    <p className="whitespace-pre-wrap">{message.content}</p>
+                  )}
                 </div>
                 {message.role === 'user' && (
                   <Avatar className="h-8 w-8 bg-muted flex items-center justify-center">
