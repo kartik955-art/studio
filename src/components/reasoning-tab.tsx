@@ -186,7 +186,7 @@ export function ReasoningTab() {
         <Card className="bg-card/50 backdrop-blur-sm border-white/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <BrainCircuit className="h-6 w-6" />
+              <BrainCircuit className="h-6 w-6 animate-pulse" />
               Nexora is thinking...
             </CardTitle>
           </CardHeader>
