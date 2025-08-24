@@ -30,7 +30,7 @@ export default function Home() {
         </div>
         <div className="mx-auto w-full max-w-4xl">
           <Tabs defaultValue="reasoning">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-3 bg-card/50 backdrop-blur-sm border-white/20">
               <TabsTrigger value="reasoning">
                 <Sparkles className="mr-2 h-4 w-4" />
                 Reasoning
