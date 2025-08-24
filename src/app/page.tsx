@@ -25,7 +25,7 @@ export default function Home() {
             Welcome to Nexora
           </h1>
           <p className="text-muted-foreground">
-            Your intelligent AI assistant for reasoning and image generation.
+            Your intelligent AI assistant for CHATBOT reasoning and image generation.
           </p>
         </div>
         <div className="mx-auto w-full max-w-4xl">

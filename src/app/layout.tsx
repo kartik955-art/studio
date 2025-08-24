@@ -5,7 +5,7 @@ import {Toaster} from '@/components/ui/toaster';
 export const metadata: Metadata = {
   title: 'Nexora',
   description:
-    'Your intelligent AI assistant for reasoning and image generation.',
+    'Your intelligent AI assistant for CHATBOT reasoning and image generation.',
 };
 
 export default function RootLayout({
