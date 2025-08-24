@@ -18,6 +18,15 @@ const RespondInsightfullyWithReasoningInputSchema = z.object({
     .describe(
       "An image, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
     ),
+  history: z
+    .array(
+      z.object({
+        role: z.enum(['user', 'bot']),
+        content: z.string(),
+      })
+    )
+    .optional()
+    .describe('The conversation history.'),
 });
 export type RespondInsightfullyWithReasoningInput = z.infer<
   typeof RespondInsightfullyWithReasoningInputSchema
@@ -45,6 +54,17 @@ const respondInsightfullyWithReasoningPrompt = ai.definePrompt({
   prompt: `You are a helpful and friendly AI assistant that provides insightful and reasoned answers to questions. Use emojis to make your answers more engaging.
 
   Answer the following question to the best of your ability, using external tools when necessary to gather information.
+
+  {{#if history}}
+  Here is the conversation history:
+  {{#each history}}
+  {{#if (eq this.role "user")}}
+  User: {{{this.content}}}
+  {{else}}
+  Assistant: {{{this.content}}}
+  {{/if}}
+  {{/each}}
+  {{/if}}
 
   {{#if imageDataUri}}
   Refer to the following image when answering the question.

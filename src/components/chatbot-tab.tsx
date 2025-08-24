@@ -118,16 +118,23 @@ export function ChatbotTab() {
       content: input,
       image: uploadedImage ?? undefined,
     };
-    setMessages(prev => [...prev, userMessage]);
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
     setInput('');
     setUploadedImage(null);
     setIsLoading(true);
     setError(null);
 
     try {
+      const history = newMessages.slice(0, -1).map(m => ({
+        role: m.role,
+        content: m.content,
+      }));
+
       const result = await respondInsightfullyWithReasoning({
         question: input,
         imageDataUri: uploadedImage ?? undefined,
+        history,
       });
       const botMessage: Message = {role: 'bot', content: result.answer};
       setMessages(prev => [...prev, botMessage]);
@@ -135,6 +142,8 @@ export function ChatbotTab() {
       setError(
         err instanceof Error ? err.message : 'An unexpected error occurred.'
       );
+      // If there's an error, remove the user's message to allow them to try again.
+      setMessages(messages);
     } finally {
       setIsLoading(false);
     }
