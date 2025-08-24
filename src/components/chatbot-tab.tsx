@@ -141,7 +141,7 @@ export function ChatbotTab() {
   };
 
   return (
-    <Card className="flex h-[700px] flex-col">
+    <Card className="flex h-[700px] flex-col bg-card/50 backdrop-blur-sm border-white/20">
       <CardContent className="flex flex-1 flex-col p-6">
         <ScrollArea className="flex-1 pr-4" ref={scrollAreaRef}>
           <div className="space-y-6">
