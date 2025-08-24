@@ -118,23 +118,16 @@ export function ChatbotTab() {
       content: input,
       image: uploadedImage ?? undefined,
     };
-    const newMessages = [...messages, userMessage];
-    setMessages(newMessages);
+    setMessages(prev => [...prev, userMessage]);
     setInput('');
     setUploadedImage(null);
     setIsLoading(true);
     setError(null);
 
     try {
-      const history = newMessages.slice(0, -1).map(m => ({
-        role: m.role,
-        content: m.content,
-      }));
-
       const result = await respondInsightfullyWithReasoning({
         question: input,
         imageDataUri: uploadedImage ?? undefined,
-        history,
       });
       const botMessage: Message = {role: 'bot', content: result.answer};
       setMessages(prev => [...prev, botMessage]);
